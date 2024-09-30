@@ -65,6 +65,7 @@ struct whisper_context_params newWhisperContextParams(JNIEnv *env, jobject jPara
   jclass paramsJClass = env->GetObjectClass(jParams);
   struct whisper_context_params params = whisper_context_default_params();
   params.use_gpu = (jboolean)env->GetBooleanField(jParams, env->GetFieldID(paramsJClass, "useGPU", "Z"));
+  params.gpu_device = (jint)env->GetIntField(jParams, env->GetFieldID(paramsJClass, "gpuDevice", "I"));
   return params;
 }
 
