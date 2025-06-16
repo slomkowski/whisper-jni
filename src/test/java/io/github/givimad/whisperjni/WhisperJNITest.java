@@ -100,14 +100,16 @@ public class WhisperJNITest {
             assertNotNull(ctx);
             var params = new WhisperFullParams(WhisperSamplingStrategy.GREEDY);
             int result = whisper.full(ctx, params, samples, samples.length);
-            if(result != 0) {
+            if (result != 0) {
                 throw new RuntimeException("Transcription failed with code " + result);
             }
             int numSegments = whisper.fullNSegments(ctx);
             assertEquals(1, numSegments);
-            long startTime = whisper.fullGetSegmentTimestamp0(ctx,0);
-            long endTime = whisper.fullGetSegmentTimestamp1(ctx,0);
-            String text = whisper.fullGetSegmentText(ctx,0);
+            long startTime = whisper.fullGetSegmentTimestamp0(ctx, 0);
+            long endTime = whisper.fullGetSegmentTimestamp1(ctx, 0);
+            String text = whisper.fullGetSegmentText(ctx, 0);
+            int noTokens = whisper.fullNTokens(ctx, 0);
+            assertEquals(26, noTokens);
             assertEquals(0, startTime);
             assertEquals(1050, endTime);
             assertEquals(" And so my fellow Americans ask not what your country can do for you, ask what you can do for your country.", text);
@@ -148,6 +150,8 @@ public class WhisperJNITest {
                 long startTime = whisper.fullGetSegmentTimestamp0FromState(state,0);
                 long endTime = whisper.fullGetSegmentTimestamp1FromState(state,0);
                 String text = whisper.fullGetSegmentTextFromState(state,0);
+                int noTokens = whisper.fullNTokensFromState(state, 0);
+                assertEquals(26, noTokens);
                 assertEquals(0, startTime);
                 assertEquals(1050, endTime);
                 assertEquals(" And so my fellow Americans ask not what your country can do for you, ask what you can do for your country.", text);
@@ -208,17 +212,19 @@ public class WhisperJNITest {
 
     @Test
     public void initOpenVINO() throws Exception {
-        try(var ctx = whisper.initNoState(testModelPath)) {
+        try (var ctx = whisper.initNoState(testModelPath)) {
             assertNotNull(ctx);
             whisper.initOpenVINO(ctx, "CPU");
         }
     }
+
     @Test
     public void validateGrammar() throws ParseException, IOException {
         assertValidGrammar(sampleAssistantGrammar);
         assertValidGrammar(sampleColorsGrammar);
         assertValidGrammar(sampleChessGrammar);
     }
+
     private float[] readJFKFileSamples() throws UnsupportedAudioFileException, IOException {
         // sample is a 16 bit int 16000hz little endian wav file
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(samplePath.toFile());

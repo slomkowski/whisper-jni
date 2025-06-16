@@ -41,11 +41,15 @@ public class WhisperJNI {
 
     private native long fullGetSegmentTimestamp1(int context, int index);
 
+    private native int fullNTokens(int context, int index);
+
     private native String fullGetSegmentText(int context, int index);
 
     private native long fullGetSegmentTimestamp0FromState(int state, int index);
 
     private native long fullGetSegmentTimestamp1FromState(int state, int index);
+
+    private native int fullNTokensFromState(int state, int index);
 
     private native String fullGetSegmentTextFromState(int state, int index);
 
@@ -261,6 +265,18 @@ public class WhisperJNI {
     }
 
     /**
+     * Gets the number of tokens in the segment.
+     *
+     * @param context a {@link WhisperContext} used to transcribe
+     * @param index the segment index
+     * @return number of tokens in the segment
+     */
+    public int fullNTokens(WhisperContext context, int index) {
+        WhisperJNIPointer.assertAvailable(context);
+        return fullNTokens(context.ref, index);
+    }
+
+    /**
      * Gets text segment by index.
      *
      * @param context a {@link WhisperContext} used to transcribe
@@ -294,6 +310,18 @@ public class WhisperJNI {
     public long fullGetSegmentTimestamp1FromState(WhisperState state, int index) {
         WhisperJNIPointer.assertAvailable(state);
         return fullGetSegmentTimestamp1FromState(state.ref, index);
+    }
+
+    /**
+     * Gets the number of tokens in the segment.
+     *
+     * @param state a {@link WhisperState} used to transcribe
+     * @param index the segment index
+     * @return number of tokens in the segment
+     */
+    public int fullNTokensFromState(WhisperState state, int index) {
+        WhisperJNIPointer.assertAvailable(state);
+        return fullNTokensFromState(state.ref, index);
     }
 
     /**
