@@ -37,9 +37,7 @@ public class WhisperJNITest {
         if(!sampleFile.exists() || !sampleFile.isFile()) {
             throw new RuntimeException("Missing sample file");
         }
-        var loadOptions = new WhisperJNI.LoadOptions();
-        loadOptions.logger = System.out::println;
-        WhisperJNI.loadLibrary(loadOptions);
+        WhisperJNI.loadLibrary(System.out::println);
         WhisperJNI.setLibraryLogger(null);
         whisper = new WhisperJNI();
     }
@@ -126,11 +124,11 @@ public class WhisperJNITest {
     }
 
     @Test
-    public void testFullBeanSearch() throws Exception {
+    public void testFullBeamSearch() throws Exception {
         float[] samples = readJFKFileSamples();
         try (var ctx = whisper.init(testModelPath)) {
             assertNotNull(ctx);
-            var params = new WhisperFullParams(WhisperSamplingStrategy.BEAN_SEARCH);
+            var params = new WhisperFullParams(WhisperSamplingStrategy.BEAM_SEARCH);
             params.printTimestamps = false;
             int result = whisper.full(ctx, params, samples, samples.length);
             if(result != 0) {
@@ -177,11 +175,11 @@ public class WhisperJNITest {
     }
 
     @Test
-    public void testFullWithStateBeanSearch() throws Exception {
+    public void testFullWithStateBeamSearch() throws Exception {
         float[] samples = readJFKFileSamples();
         try (var ctx = whisper.initNoState(testModelPath)) {
             assertNotNull(ctx);
-            var params = new WhisperFullParams(WhisperSamplingStrategy.BEAN_SEARCH);
+            var params = new WhisperFullParams(WhisperSamplingStrategy.BEAM_SEARCH);
             params.printTimestamps = false;
             try (var state = whisper.initState(ctx)) {
                 assertNotNull(state);
