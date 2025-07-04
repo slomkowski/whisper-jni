@@ -290,6 +290,116 @@ JNIEXPORT jint JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullNTokens(
   return whisper_full_n_tokens(whisper_ctx, index);
 }
 
+JNIEXPORT jobject JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullGetTokenData(JNIEnv *env, jobject thisObject, jint ctxRef, jint segmentIndex, jint tokenIndex)
+{
+  whisper_context *whisper_ctx = contextMap.at(ctxRef);
+  int nSegments = whisper_full_n_segments(whisper_ctx);
+  if (nSegments < segmentIndex + 1)
+  {
+    jclass exClass = env->FindClass("java/lang/IndexOutOfBoundsException");
+    env->ThrowNew(exClass, "Index out of range");
+    return 0L;
+  }
+  int nTokens = whisper_full_n_tokens(whisper_ctx, segmentIndex);
+  if (nTokens < tokenIndex + 1)
+  {
+    jclass exClass = env->FindClass("java/lang/IndexOutOfBoundsException");
+    env->ThrowNew(exClass, "Index out of range");
+    return 0L;
+  }
+
+  whisper_token_data tokenData = whisper_full_get_token_data(whisper_ctx, segmentIndex, tokenIndex);
+
+  jclass tokenDataClass = env->FindClass("io/github/givimad/whisperjni/WhisperTokenData");
+  if (tokenDataClass == NULL) {
+      return NULL; // Class not found.
+  }
+
+  // Get the constructor method ID for WhisperTokenData
+  jmethodID constructor = env->GetMethodID(
+      tokenDataClass,
+      "<init>",
+      "(IIFFFFJJJF)V"
+  );
+  if (constructor == NULL) {
+      return NULL; // Constructor not found.
+  }
+
+  // Create a new Java WhisperTokenData object
+  jobject tokenDataObj = env->NewObject(
+      tokenDataClass,
+      constructor,
+      tokenData.id,
+      tokenData.tid,
+      tokenData.p,
+      tokenData.plog,
+      tokenData.pt,
+      tokenData.ptsum,
+      tokenData.t0,
+      tokenData.t1,
+      tokenData.t_dtw,
+      tokenData.vlen
+  );
+
+  // Return the created object
+  return tokenDataObj;
+}
+
+JNIEXPORT jobject JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullGetTokenDataFromState(JNIEnv *env, jobject thisObject, jint stateRef, jint segmentIndex, jint tokenIndex)
+{
+   whisper_state *state = stateMap.at(stateRef);
+   int nSegments = whisper_full_n_segments_from_state(state);
+   if (nSegments < segmentIndex + 1)
+   {
+     jclass exClass = env->FindClass("java/lang/IndexOutOfBoundsException");
+     env->ThrowNew(exClass, "Index out of range");
+     return 0L;
+   }
+  int nTokens = whisper_full_n_tokens_from_state(state, segmentIndex);
+  if (nTokens < tokenIndex + 1)
+  {
+    jclass exClass = env->FindClass("java/lang/IndexOutOfBoundsException");
+    env->ThrowNew(exClass, "Index out of range");
+    return 0L;
+  }
+
+  whisper_token_data tokenData = whisper_full_get_token_data_from_state(state, segmentIndex, tokenIndex);
+
+  jclass tokenDataClass = env->FindClass("io/github/givimad/whisperjni/WhisperTokenData");
+  if (tokenDataClass == NULL) {
+      return NULL; // Class not found.
+  }
+
+  // Get the constructor method ID for WhisperTokenData
+  jmethodID constructor = env->GetMethodID(
+      tokenDataClass,
+      "<init>",
+      "(IIFFFFJJJF)V"
+  );
+  if (constructor == NULL) {
+      return NULL; // Constructor not found.
+  }
+
+  // Create a new Java WhisperTokenData object
+  jobject tokenDataObj = env->NewObject(
+      tokenDataClass,
+      constructor,
+      tokenData.id,
+      tokenData.tid,
+      tokenData.p,
+      tokenData.plog,
+      tokenData.pt,
+      tokenData.ptsum,
+      tokenData.t0,
+      tokenData.t1,
+      tokenData.t_dtw,
+      tokenData.vlen
+  );
+
+  // Return the created object
+  return tokenDataObj;
+}
+
 JNIEXPORT jstring JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullGetSegmentText(JNIEnv *env, jobject thisObject, jint ctxRef, jint index)
 {
   whisper_context *whisper_ctx = contextMap.at(ctxRef);

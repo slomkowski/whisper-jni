@@ -8,6 +8,7 @@ $LIB_SRC/WhisperContext.java \
 $LIB_SRC/WhisperGrammar.java \
 $LIB_SRC/WhisperSamplingStrategy.java \
 $LIB_SRC/WhisperFullParams.java \
+$LIB_SRC/WhisperTokenData.java \
 $LIB_SRC/WhisperState.java \
 $LIB_SRC/WhisperJNI.java
 

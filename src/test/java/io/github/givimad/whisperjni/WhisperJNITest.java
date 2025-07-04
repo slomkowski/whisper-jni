@@ -113,6 +113,15 @@ public class WhisperJNITest {
             assertEquals(0, startTime);
             assertEquals(1050, endTime);
             assertEquals(" And so my fellow Americans ask not what your country can do for you, ask what you can do for your country.", text);
+
+            // all tokens except the last have decent probability, except the last, which is the applause
+            for (int i = 0; i < noTokens - 1; ++i) {
+                WhisperTokenData tokenData = whisper.fullGetTokenData(ctx, 0, i);
+                assertNotNull(tokenData);
+                assertTrue(tokenData.getId() > 0);
+                assertTrue(tokenData.getTid() >= 0);
+                assertTrue(tokenData.getP() > 0.2);
+            }
         }
     }
 
@@ -155,6 +164,14 @@ public class WhisperJNITest {
                 assertEquals(0, startTime);
                 assertEquals(1050, endTime);
                 assertEquals(" And so my fellow Americans ask not what your country can do for you, ask what you can do for your country.", text);
+                // all tokens except the last have decent probability, except the last, which is the applause
+                for (int i = 0; i < noTokens - 1; ++i) {
+                    WhisperTokenData tokenData = whisper.fullGetTokenDataFromState(state, 0, i);
+                    assertNotNull(tokenData);
+                    assertTrue(tokenData.getId() > 0);
+                    assertTrue(tokenData.getTid() >= 0);
+                    assertTrue(tokenData.getP() > 0.2);
+                }
             }
         }
     }

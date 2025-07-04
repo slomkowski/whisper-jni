@@ -43,6 +43,8 @@ public class WhisperJNI {
 
     private native int fullNTokens(int context, int index);
 
+    private native WhisperTokenData fullGetTokenData(int context, int segmentIndex, int tokenIndex);
+
     private native String fullGetSegmentText(int context, int index);
 
     private native long fullGetSegmentTimestamp0FromState(int state, int index);
@@ -50,6 +52,8 @@ public class WhisperJNI {
     private native long fullGetSegmentTimestamp1FromState(int state, int index);
 
     private native int fullNTokensFromState(int state, int index);
+
+    private native WhisperTokenData fullGetTokenDataFromState(int state, int segmentIndex, int tokenIndex);
 
     private native String fullGetSegmentTextFromState(int state, int index);
 
@@ -274,6 +278,16 @@ public class WhisperJNI {
     public int fullNTokens(WhisperContext context, int index) {
         WhisperJNIPointer.assertAvailable(context);
         return fullNTokens(context.ref, index);
+    }
+
+    public WhisperTokenData fullGetTokenData(WhisperContext context, int segmentIndex, int tokenIndex) {
+        WhisperJNIPointer.assertAvailable(context);
+        return fullGetTokenData(context.ref, segmentIndex, tokenIndex);
+    }
+
+    public WhisperTokenData fullGetTokenDataFromState(WhisperState state, int segmentIndex, int tokenIndex) {
+        WhisperJNIPointer.assertAvailable(state);
+        return fullGetTokenDataFromState(state.ref, segmentIndex, tokenIndex);
     }
 
     /**

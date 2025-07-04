@@ -113,6 +113,14 @@ JNIEXPORT jint JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullNTokens
 
 /*
  * Class:     io_github_givimad_whisperjni_WhisperJNI
+ * Method:    fullGetTokenData
+ * Signature: (III)Lio/github/givimad/whisperjni/WhisperTokenData;
+ */
+JNIEXPORT jobject JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullGetTokenData
+  (JNIEnv *, jobject, jint, jint, jint);
+
+/*
+ * Class:     io_github_givimad_whisperjni_WhisperJNI
  * Method:    fullGetSegmentText
  * Signature: (II)Ljava/lang/String;
  */
@@ -142,6 +150,14 @@ JNIEXPORT jlong JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullGetSegm
  */
 JNIEXPORT jint JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullNTokensFromState
   (JNIEnv *, jobject, jint, jint);
+
+/*
+ * Class:     io_github_givimad_whisperjni_WhisperJNI
+ * Method:    fullGetTokenDataFromState
+ * Signature: (III)Lio/github/givimad/whisperjni/WhisperTokenData;
+ */
+JNIEXPORT jobject JNICALL Java_io_github_givimad_whisperjni_WhisperJNI_fullGetTokenDataFromState
+  (JNIEnv *, jobject, jint, jint, jint);
 
 /*
  * Class:     io_github_givimad_whisperjni_WhisperJNI
